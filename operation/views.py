@@ -110,7 +110,8 @@ def stripe_webhook(request):
         
     except:
         print("Exception in webhook:")
-        return HttpResponse(status=422, message="Webhook payload is malformed or missing required fields")
+        return HttpResponse("Webhook payload is malformed or missing required fields", status=422)
+
 
     return HttpResponse(status=200)
 
@@ -139,7 +140,7 @@ def stripe_transaction(request, course_id):
     except Exception as e:
         return JsonResponse(
             { 
-                "message" : f"{e}while making a transaction, please try again ...",
+                "message" : f"while making a transaction, please try again ...",
             },
             status = 400
         )
