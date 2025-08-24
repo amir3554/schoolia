@@ -116,3 +116,40 @@ async function _stripeInit() {
 }
 
 _stripeInit();
+
+
+
+
+// لو تستخدم Django: خذ CSRF من الكوكيز
+function getCookie(name) {
+    const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+  axios.defaults.headers.common['X-CSRFToken'] = getCookie('csrftoken');
+
+  document.getElementById('my-buy-btn').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+
+    // اقرأ data-info
+    const transactionElement = document.getElementById('transaction');
+    const transactionId = transactionElement.getAttribute('data-transaction-id');
+    let payload;
+    try {               // لو JSON
+      payload = JSON.parse(transactionId);
+    } catch (_) {       // لو نص عادي
+      payload = { transaction_id: transactionId };
+    }
+
+    btn.disabled = true; // منع الضغط المزدوج
+    try {
+      // أرسل كـ JSON (المسار مثال)
+      const res = await axios.post('/operation/checkout-transaction/', payload);
+      console.log('OK', res.data);
+      // ... حدث الواجهة حسب الحاجة
+    } catch (err) {
+      console.error('POST error:', err.response?.data || err.message);
+      alert('حدث خطأ في الإرسال');
+    } finally {
+      btn.disabled = false;
+    }
+  });
