@@ -278,7 +278,7 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
     def get_success_url(self):
-        return reverse('Lesson', args=[self.object.unit.course.pk, self.object.pk])
+        return reverse('LessonUpdate', args=[self.object.pk])
     
 
 
@@ -437,7 +437,7 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
     def get_success_url(self):
-        return reverse('Lesson', args=[self.object.unit.course.pk, self.object.pk])
+        return reverse('LessonUpdate', args=[self.object.pk])
     
 
 

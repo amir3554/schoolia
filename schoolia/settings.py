@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vgtums^kz5+f2#9w==15l0-q&k$gua8rohfsbh6s75krjicqa9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'schoolia-app-456b3f26b08d.herokuapp.com',
