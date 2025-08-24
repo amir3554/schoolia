@@ -58,8 +58,8 @@
           </div>
         {% elif lesson.video %}
           <!-- ملف فيديو داخلي -->
-          <video class="w-100 rounded" controls preload="metadata" poster="{{ lesson.image.url|default:'' }}">
-            <source src="{{ lesson.video.url }}" type="video/mp4">
+          <video class="w-100 rounded" controls preload="metadata" poster="{{ lesson.image }}">
+            <source src="{{ lesson.video }}" type="video/mp4">
           {% trans "your browser doesn't support this video." %}
           </video>
         {% else %}
