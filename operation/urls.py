@@ -8,5 +8,5 @@ urlpatterns = [
     path('stripe/webhook/', views.stripe_webhook, name='StripeWebhook'),
     path('check-out/<int:course_id>/', views.check_out, name='CheckOut'),
     path('check-out-complete/<slug:transaction_id>/', views.check_out_complete, name='CheckOutComplete'),
-    
+    path('operation/checkout-transaction/', views.check_out_transaction)
 ]

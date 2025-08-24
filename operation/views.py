@@ -17,6 +17,8 @@ from .decorators import not_teacher
 
 import math
 
+import json
+
 
 
 def make_transaction(user_id, course_id, pm):
@@ -65,23 +67,30 @@ def check_out(request, course_id):
         }
     )
 
+@login_required
+def check_out_transaction(request):
+    data = json.loads(request.body)
+    transaction_id = data.get('transaction_id')
+    transaction = Transaction.objects.get(transaction_id)
+    transaction.status = TransactionStatus.COMPLETED
+    transaction.save()
+    return JsonResponse({'message' : 'transaction completed'})
 
 @login_required
-def check_out_complete(request, transaction_id):
-    if transaction_id is None or transaction_id=='':
-        return render(
-            request, 'check_out_complete.html'
-        )
-    else:
-        try:
-            transaction = Transaction.objects.get(transaction_id)
-            transaction.status = TransactionStatus.COMPLETED
-            transaction.save()
-        except transaction.DoesNotExist:
-            return HttpResponse("Transaction Doesn't exist")
-        return render(
-            request, 'check_out_complete.html'
-        )
+def check_out_complete(request):
+    return render(
+        request, 'check_out_complete.html'
+    )
+    # else:
+    #     try:
+    #         transaction = Transaction.objects.get(transaction_id)
+    #         transaction.status = TransactionStatus.COMPLETED
+    #         transaction.save()
+    #     except transaction.DoesNotExist:
+    #         return HttpResponse("Transaction Doesn't exist")
+    #     return render(
+    #         request, 'check_out_complete.html'
+    #     )
 
 
 

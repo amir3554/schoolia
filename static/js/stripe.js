@@ -71,13 +71,12 @@ async function createStripeSession() {
 async function _stripeFormSubmit(e) {
     e.preventDefault();
     stripeSubmit.disabled = true;
-    const transactionElement = document.getElementById('transaction');
-    const transactionId = transactionElement.getAttribute('data-transaction-id');
+    
     const host = window.location.protocol + "//" + window.location.host;
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-            return_url: `${host}/operation/check-out-complete/${transactionId}/`,
+            return_url: `${host}/operation/check-out-complete/`,
         },
     });
 
