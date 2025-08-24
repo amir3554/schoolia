@@ -67,8 +67,8 @@ def check_out(request, course_id):
 
 
 @login_required
-def check_out_complete(request, transaction_id=None):
-    if transaction_id is None:
+def check_out_complete(request, transaction_id):
+    if transaction_id is None or transaction_id=='':
         return render(
             request, 'check_out_complete.html'
         )
