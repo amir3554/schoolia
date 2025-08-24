@@ -93,83 +93,83 @@ def get_publishable_key(request):
         }
     )
 
-# @csrf_exempt
-# def stripe_webhook(request):
-#     payload = request.body # to get to the data of the request
-#     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-
-#     try:
-#         stripe_event_webhook = stripe.Webhook.construct_event(
-#             payload,
-#             sig_header,
-#             settings.STRIPE_ENDPOINT_SECRET
-#         )
-#     except ValueError:
-#         print('Invalid payload')
-#         return HttpResponse(status=400)
-    
-#     except SignatureVerificationError:
-#         print('Invalid signature')
-#         return HttpResponse(status=400)
-    
-#     try:
-#         print("Event type received:", stripe_event_webhook.type)
-#         # Handle the event
-#         if stripe_event_webhook.type == 'payment_intent.succeeded':
-#             payment_intent = stripe_event_webhook.data.object
-#             transaction_id = payment_intent.metadata.transaction #type:ignore
-#             transaction_complete(transaction_id)
-        
-#     except:
-#         print("Exception in webhook:")
-#         return HttpResponse("Webhook payload is malformed or missing required fields", status=422)
-
-
-#     return HttpResponse(status=200)
-
 @csrf_exempt
-@require_POST
 def stripe_webhook(request):
-
-    payload = request.body.decode("utf-8")  # فك الترميز
-    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
-    endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
-
-    # التحقق من التوقيع
-    try:
-        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
-    except ValueError as e:
-        print("Invalid payload:", e)
-        return HttpResponse(status=400)
-    except SignatureVerificationError as e:
-        print("Invalid signature:", e)
-        return HttpResponse(status=400)
-
-    event_type = getattr(event, "type", None)
-    print("Event received:", event_type)
+    payload = request.body # to get to the data of the request
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
 
     try:
-        if event_type == "payment_intent.succeeded":
-            pi = event.data.object  # PaymentIntent
-            # احصل على transaction من الميتاداتا إن كنت أضفته عند الإنشاء
-            meta = getattr(pi, "metadata", {}) or {}
-            transaction_id = getattr(meta, "transaction", None) or meta.get("transaction")
-            if transaction_id:
-                transaction_complete(transaction_id)
-            else:
-                print("No 'transaction' in metadata")
+        stripe_event_webhook = stripe.Webhook.construct_event(
+            payload,
+            sig_header,
+            settings.STRIPE_ENDPOINT_SECRET
+        )
+    except ValueError:
+        print('Invalid payload')
+        return HttpResponse(status=400)
+    
+    except SignatureVerificationError:
+        print('Invalid signature')
+        return HttpResponse(status=400)
+    
+    try:
+        print("Event type received:", stripe_event_webhook.type)
+        # Handle the event
+        if stripe_event_webhook.type == 'payment_intent.succeeded':
+            payment_intent = stripe_event_webhook.data.object
+            transaction_id = payment_intent.metadata.transaction #type:ignore
+            transaction_complete(transaction_id)
+        
+    except:
+        print("Exception in webhook:")
+        return HttpResponse("Webhook payload is malformed or missing required fields", status=422)
 
-        # يمكنك التعامل مع أحداث أخرى إن أردت
-        # elif event_type == "charge.succeeded":
-        #     ...
 
-    except Exception as e:
-        # لو حدث خطأ أثناء المعالجة أظهره وارجع 500 كي يعيد Stripe المحاولة
-        print("Webhook handling error:", e)
-        return HttpResponse(status=500)
-
-    # IMPORTANT: ردّ 200 لكل الأحداث التي مرّت بدون مشاكل
     return HttpResponse(status=200)
+
+# @csrf_exempt
+# @require_POST
+# def stripe_webhook(request):
+
+#     payload = request.body.decode("utf-8")  # فك الترميز
+#     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
+#     endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
+
+#     # التحقق من التوقيع
+#     try:
+#         event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+#     except ValueError as e:
+#         print("Invalid payload:", e)
+#         return HttpResponse(status=400)
+#     except SignatureVerificationError as e:
+#         print("Invalid signature:", e)
+#         return HttpResponse(status=400)
+
+#     event_type = getattr(event, "type", None)
+#     print("Event received:", event_type)
+
+#     try:
+#         if event_type == "payment_intent.succeeded":
+#             pi = event.data.object  # PaymentIntent
+#             # احصل على transaction من الميتاداتا إن كنت أضفته عند الإنشاء
+#             meta = getattr(pi, "metadata", {}) or {}
+#             transaction_id = getattr(meta, "transaction", None) or meta.get("transaction")
+#             if transaction_id:
+#                 transaction_complete(transaction_id)
+#             else:
+#                 print("No 'transaction' in metadata")
+
+#         # يمكنك التعامل مع أحداث أخرى إن أردت
+#         # elif event_type == "charge.succeeded":
+#         #     ...
+
+#     except Exception as e:
+#         # لو حدث خطأ أثناء المعالجة أظهره وارجع 500 كي يعيد Stripe المحاولة
+#         print("Webhook handling error:", e)
+#         return HttpResponse(status=500)
+
+#     # IMPORTANT: ردّ 200 لكل الأحداث التي مرّت بدون مشاكل
+#     return HttpResponse(status=200)
 
 
 
