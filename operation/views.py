@@ -119,7 +119,7 @@ def stripe_transaction(request, course_id):
     try:
         transaction = make_transaction(request.user.pk, course_id, PaymentMethod.STRIPE)
     
-        stripe.api_key = settings.SECRET_KEY
+        stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe.api_version = "2023-10-16"  
 
         intent = stripe.PaymentIntent.create(
