@@ -58,6 +58,8 @@ main{
             <h4 class="my-3">{% trans "Payment method" %}</h4>
             <div class="row">
                 <div class="col-md-12">
+                    <div id="paypal-card" class="card my-3 p-3" style="display: none">
+                        </div>
                     <div class="card" role="button" onclick="createStripeSession()">
                         <div class="card-body text-center">
                             <p>{% trans "credit card" %}</p>

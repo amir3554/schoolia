@@ -26,10 +26,10 @@ function getCsrfToken() {
 
 async function createStripeSession() {
 
-    const courseElement = document.getElementById('course-id');
-    const courseId = courseElement.getAttribute('data-course-id');
+        const courseElement = document.getElementById('course-id');
+        const courseId = courseElement.getAttribute('data-course-id');
 
-    const host = window.location.protocol + "//" + window.location.host;
+    switchPaymentMethod('srtipe', '')
 
     stripeSubmit.disabled = true;
 
@@ -40,14 +40,11 @@ async function createStripeSession() {
 
     try {
         const { data } = await axios.post(
-            `${host}/operation/stripe/${courseId}/`,
-            {} ,
-            { headers }
+            `/operation/stripe/${courseId}/`,
+            {} ,// the body of the request (empty object if there are no date)
+            { headers } // here comes the config that has the header
         );
-        const { client_secret , transactionId } = data;
-        
-        const transactionDiv = document.querySelector('#transaction');
-        transactionDiv.setAttribute('data-transaction-id', transactionId)
+        const { client_secret } = data;
 
         const appearance = { theme: 'flat' };
         elements = stripe.elements({ appearance, clientSecret: client_secret });
@@ -56,22 +53,21 @@ async function createStripeSession() {
 
         document
         .querySelector("#payment-form")
-        .addEventListener("submit", myfunc);
+        .addEventListener("submit", _stripeFormSubmit);
 
         document.getElementById('stripe-card').style.display = 'block';
         stripeSubmit.disabled = false;
         console.log("paymentElement", paymentElement);
           
-    
     } catch (e) {
-        console.log('error in transaction')
+        notyf.error(e?.response?.data?.message
+            || "An error occurred while creating a stripe session." );
     } 
 }
 
 async function _stripeFormSubmit(e) {
     e.preventDefault();
     stripeSubmit.disabled = true;
-    
     const host = window.location.protocol + "//" + window.location.host;
     const { error } = await stripe.confirmPayment({
         elements,
@@ -116,33 +112,3 @@ async function _stripeInit() {
 }
 
 _stripeInit();
-
-
-async function myfunc(e) {
-    e.preventDefault();
-    stripeSubmit.disabled = true;
-
-    // اقرأ data-info
-    const transactionElement = document.getElementById('transaction');
-    const transactionId = transactionElement.getAttribute('data-transaction-id');
-    let payload;
-    try {               // لو JSON
-      payload = JSON.parse(transactionId);
-    } catch (_) {       // لو نص عادي
-      payload = { transaction_id: transactionId };
-    }
-
-
-
-try {
-    // أرسل كـ JSON (المسار مثال)
-    const res = await axios.post('/operation/checkout-transaction/', payload);
-    console.log('OK', res.data);
-    // ... حدث الواجهة حسب الحاجة
-} catch (err) {
-    console.error('POST error:', err.response?.data || err.message);
-    alert('حدث خطأ في الإرسال');
-} finally {
-    btn.disabled = false;
-};
-}
