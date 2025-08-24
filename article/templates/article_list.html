@@ -59,6 +59,9 @@
             {{ article.content }}
         </p>
         <br>
+        <a class="btn btn-primary px-4" href="{% url 'Article' article.id %}">
+              <i class="bi bi-eye ms-1"></i> {% trans "View" %}
+            </a>
          <span class="pull-right btn bg bg-white" style="font-size:small;">                    
             {{ article.created_at }}
         </span>
