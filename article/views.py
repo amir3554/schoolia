@@ -9,7 +9,7 @@ from utils.s3 import upload_fileobj_to_s3, public_url
 
 @login_required
 def article_detail(request, article_id):
-    article = get_object_or_404(Article, pk=article_id, student=request.user)
+    article = get_object_or_404(Article, pk=article_id)
     comments = (Comment.objects
                 .filter(receiver_content_type__model='article',
                         receiver_object_id=article.pk)
