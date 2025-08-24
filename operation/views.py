@@ -30,6 +30,7 @@ def make_transaction(user_id, course_id, pm):
         defaults={
             'amount' : math.ceil(course.price),
             'payment_method' : pm,
+            'status' : TransactionStatus.COMPLETED
         },
         course_id = course.pk,
         student_id = user_id
