@@ -67,6 +67,7 @@ def check_out(request, course_id):
         }
     )
 
+@csrf_exempt
 @login_required
 def check_out_transaction(request):
     data = json.loads(request.body)
@@ -74,7 +75,9 @@ def check_out_transaction(request):
     transaction = Transaction.objects.get(transaction_id)
     transaction.status = TransactionStatus.COMPLETED
     transaction.save()
-    return JsonResponse({'message' : 'transaction completed'})
+    return render(
+        request, 'check_out_complete.html'
+    )
 
 @login_required
 def check_out_complete(request):
