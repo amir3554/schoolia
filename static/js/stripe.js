@@ -38,13 +38,16 @@ async function createStripeSession() {
         'X-CSRFToken' : getCsrfToken()
     }
 
-     {
+    try {
         const { data } = await axios.post(
             `${host}/operation/stripe/${courseId}/`,
             {} ,
             { headers }
         );
-        const { client_secret } = data;
+        const { client_secret , transactionId } = data;
+        
+        const transactionDiv = document.querySelector('#transaction');
+        transactionDiv.setAttribute('data-transaction-id', transactionId)
 
         const appearance = { theme: 'flat' };
         elements = stripe.elements({ appearance, clientSecret: client_secret });
@@ -60,19 +63,21 @@ async function createStripeSession() {
         console.log("paymentElement", paymentElement);
           
     
-        notyf.error(e?.response?.data?.message
-            || "An error occurred while creating a stripe session." );
+    } catch (e) {
+        console.log('error in transaction')
     } 
 }
 
 async function _stripeFormSubmit(e) {
     e.preventDefault();
     stripeSubmit.disabled = true;
+    const transactionElement = document.getElementById('transaction');
+    const transactionId = transactionElement.getAttribute('data-transaction-id');
     const host = window.location.protocol + "//" + window.location.host;
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-            return_url: `${host}/operation/check-out-complete/`,
+            return_url: `${host}/operation/check-out-complete/${transactionId}/`,
         },
     });
 

@@ -67,10 +67,21 @@ def check_out(request, course_id):
 
 
 @login_required
-def check_out_complete(request):
-    return render(
-        request, 'check_out_complete.html'
-    )
+def check_out_complete(request, transaction_id=None):
+    if transaction_id is None:
+        return render(
+            request, 'check_out_complete.html'
+        )
+    else:
+        try:
+            transaction = Transaction.objects.get(transaction_id)
+            transaction.status = TransactionStatus.COMPLETED
+            transaction.save()
+        except transaction.DoesNotExist:
+            return HttpResponse("Transaction Doesn't exist")
+        return render(
+            request, 'check_out_complete.html'
+        )
 
 
 
@@ -119,6 +130,7 @@ def get_publishable_key(request):
 @csrf_exempt
 @require_POST
 def stripe_webhook(request):
+
     payload = request.body.decode("utf-8")  # فك الترميز
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
     endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
@@ -179,7 +191,8 @@ def stripe_transaction(request, course_id):
         )
         return JsonResponse(
             {
-                'client_secret': intent["client_secret"]
+                'client_secret': intent["client_secret"],
+                'transactionId' : transaction.pk,
             }
         )
 

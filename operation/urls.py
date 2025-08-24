@@ -7,6 +7,6 @@ urlpatterns = [
     path('stripe/<int:course_id>/', views.stripe_transaction, name="StripeTransaction"),
     path('stripe/webhook/', views.stripe_webhook, name='StripeWebhook'),
     path('check-out/<int:course_id>/', views.check_out, name='CheckOut'),
-    path('check-out-complete/', views.check_out_complete, name='CheckOutComplete'),
+    path('check-out-complete/<int:transaction_id>/', views.check_out_complete, name='CheckOutComplete'),
     
 ]
