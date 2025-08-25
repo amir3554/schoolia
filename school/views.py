@@ -43,7 +43,7 @@ def course_view(request, course_id):
     return render(request, 'course/course.html', { 'units' : units })
 
 
-def article_details(request, course_id):
+def course_details(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     return render(request, 'course_details.html', { 'course' : course })
 

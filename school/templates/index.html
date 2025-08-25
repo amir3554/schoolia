@@ -3,6 +3,13 @@
 {% load static %}
 {% block content %}
 
+
+{% block title %}
+
+{{ course.name }}
+
+{% endblock title %}
+
 {% block extra_css %}
 
 <link href="{% static 'css/main_schoolia.css' %}" rel="stylesheet">
@@ -59,7 +66,7 @@
                 {{ course }}
             </p>
             <br>
-            <a class="btn btn-primary px-4" href="{% url 'ArticleDetails' article.id %}">
+            <a class="btn btn-primary px-4" href="{% url 'CourseDetails' course.id %}">
               <i class="bi bi-eye ms-1"></i>
             </a>
             <br>
