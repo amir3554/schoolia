@@ -123,6 +123,19 @@ function deleteLesson(lessonId) {
 
 
 
+document.querySelectorAll('.delete-btn-article').forEach(button => {
+    button.addEventListener('click', function() {
+        const articleId = this.getAttribute('data-article-id');
+        const confirmDelete = confirm("Are you sure you want to delete this article?");
+        
+        if (confirmDelete) {
+            deleteArticle(articleId);
+        }
+    });
+});
+
+
+
 function deleteArticle(articleId) {
     fetch(`/article/article/delete/${articleId}/`, {
         method: 'DELETE', // or 'POST' if you are using a form submission
@@ -148,6 +161,19 @@ function deleteArticle(articleId) {
         alert("An error occurred while trying to delete the article. CATCH");
     });
 }
+
+
+document.querySelectorAll('.delete-btn-comment').forEach(button => {
+    button.addEventListener('click', function() {
+        const commentId = this.getAttribute('data-comment-id');
+        const confirmDelete = confirm("Are you sure you want to delete this comment?");
+        
+        if (confirmDelete) {
+            deleteComment(commentId);
+        }
+    });
+});
+
 
 
 function deleteComment(commentId) {

@@ -20,9 +20,11 @@
                 {% trans "Articles Schoolia" %}
             </p>
             <br>
-            <a class="btn btn-info-outline" href="{% url 'ArticleCreate' %}">
-                {% trans "Write Article!" %}
-            </a>
+            <p class="text-center text-secondary">
+                <a class="btn btn-info" href="{% url 'ArticleCreate' %}">
+                    {% trans "Write Article!" %}
+                </a>
+            </p>
             <div class="d-flex justify-content-center">
 
             </div>
@@ -68,7 +70,7 @@
         </span>
         <br>
         <a class="btn btn-primary px-4" href="{% url 'Article' article.id %}">
-              <i class="bi bi-eye ms-1"></i> {% trans "View" %}
+              <i class="bi bi-eye ms-1"></i>
         </a>
         <br>
         {% if article.studen == request.user or request.teacher %}
