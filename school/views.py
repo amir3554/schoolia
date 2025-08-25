@@ -45,7 +45,7 @@ def course_view(request, course_id):
 
 def course_details(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    return render(request, 'course_details.html', { 'course' : course })
+    return render(request, 'course/course_details.html', { 'course' : course })
 
 
 @require_http_methods(["GET"])
