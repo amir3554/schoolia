@@ -5,7 +5,7 @@ from .models import Course, Unit, Lesson, Comment
 from school.decorators import has_courses, require_course_access
 from authentication.models import Student
 from django.http import HttpResponse
-
+from django.db.models import Prefetch, Count
 
 
 @require_http_methods(["GET"])
@@ -43,9 +43,24 @@ def course_view(request, course_id):
     return render(request, 'course/course.html', { 'units' : units })
 
 
-def course_details(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    return render(request, 'course/course_details.html', { 'course' : course })
+def course_landing(request, course_id):
+    course = get_object_or_404(Course.objects.only('id'), pk=course_id)
+
+    lessons_qs = Lesson.objects.only('id', 'title', 'content', 'image', 'unit_id')
+
+    units = (Unit.objects
+             .filter(course_id=course.pk)
+             .only('id', 'name', 'description', 'course_id')
+             .prefetch_related(Prefetch('lesson_set', queryset=lessons_qs))
+             .annotate(_lessons=Count('lesson')))
+
+    total_lessons = sum(u.lesson_set.count() for u in units) #type:ignore
+
+    return render(request, 'course_landing.html', {
+        'course': course,
+        'units': units,
+        'total_lessons': total_lessons,
+    })
 
 
 @require_http_methods(["GET"])

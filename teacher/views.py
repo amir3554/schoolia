@@ -160,9 +160,9 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 except Exception:
                     pass
 
-                key = f"media/courses/{random.randint(1, 1000)}-{random.randint(1, 1000)}-{f.name}"
-                upload_fileobj_to_s3(f, key, content_type=f.content_type)
-                self.object.image = public_url(key) 
+                
+                key = upload_fileobj_to_s3(f, content_type=f.content_type)
+                self.object.image = public_url(key)
 
                 form.cleaned_data["image"] = None
                 if "image" in form.files:
@@ -246,9 +246,8 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             except Exception:
                 pass
 
-            key = f"media/courses/{random.randint(1, 1000)}-{random.randint(1, 1000)}-{image.name}"
-            upload_fileobj_to_s3(image, key, content_type=image.content_type)
-            self.object.image = public_url(key) 
+            key = upload_fileobj_to_s3(image, content_type=image.content_type)
+            self.object.image = public_url(key)
 
             form.cleaned_data["image"] = None
             if "image" in form.files:
@@ -265,9 +264,8 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             except Exception:
                 pass
 
-            key = f"media/courses/{random.randint(1, 1000)}-{random.randint(1, 1000)}-{video.name}"
-            upload_fileobj_to_s3(video, key, content_type=video.content_type)
-            self.object.video = public_url(key) 
+            key = upload_fileobj_to_s3(video, content_type=video.content_type)
+            self.object.image = public_url(key)
 
             form.cleaned_data["video"] = None
             if "video" in form.files:
@@ -322,9 +320,8 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 except Exception:
                     pass
 
-                key = f"media/courses/{random.randint(1, 1000)}-{random.randint(1, 1000)}-{f.name}"
-                upload_fileobj_to_s3(f, key, content_type=f.content_type)
-                self.object.image = public_url(key) 
+                key = upload_fileobj_to_s3(f, content_type=f.content_type)
+                self.object.image = public_url(key)
 
                 form.cleaned_data["image"] = None
                 if "image" in form.files:
@@ -405,9 +402,8 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             except Exception:
                 pass
 
-            key = f"media/courses/{random.randint(1, 1000)}-{random.randint(1, 1000)}-{image.name}"
-            upload_fileobj_to_s3(image, key, content_type=image.content_type)
-            self.object.image = public_url(key) 
+            key = upload_fileobj_to_s3(image, content_type=image.content_type)
+            self.object.image = public_url(key)
 
             form.cleaned_data["image"] = None
             if "image" in form.files:
@@ -424,9 +420,8 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             except Exception:
                 pass
 
-            key = f"media/courses/{random.randint(1, 1000)}-{random.randint(1, 1000)}-{video.name}"
-            upload_fileobj_to_s3(video, key, content_type=video.content_type)
-            self.object.video = public_url(key) 
+            key = upload_fileobj_to_s3(video, content_type=video.content_type)
+            self.object.image = public_url(key)
 
             form.cleaned_data["video"] = None
             if "video" in form.files:

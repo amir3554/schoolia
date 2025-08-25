@@ -211,6 +211,7 @@ CSRF_TRUSTED_ORIGINS = [
 USE_S3 = bool(True)#os.getenv("USE_S3") == "1"
 
 if USE_S3:
+    UPLOAD_S3_FOLDER = "media/courses/"
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "schooliamain")
     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"

@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.fields import GenericRelation
 from schoolia import settings
 from authentication.models import Student
-
+from utils.uploads import short_upload_path
 
 
 class Course(models.Model):

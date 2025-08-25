@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden, JsonResponse
 from school.models import  Comment
 from .models import Article
 import random
@@ -102,7 +103,26 @@ def article_update(request, article_id):
     return render(request, 'article_form.html', {'article': article})
 
 
+@login_required
+@require_http_methods(['DELETE'])
+def article_delete(request, pk):
+    is_teacher = getattr(request, 'is_teacher', None)
+    is_supervisor = getattr(request, 'is_supervisor', None)
+    teacher = getattr(request, 'teacher', None)
+    article = get_object_or_404(Article, id=pk)
 
+    if teacher is None:
+        return HttpResponseForbidden()
+    if is_teacher is None:
+        return HttpResponseForbidden()
+    if is_supervisor is None:
+        return HttpResponseForbidden()
+    
+    if article.student != request.user:
+        return HttpResponseForbidden()
+    
+    article.delete()
+    return JsonResponse({'message': 'article deleted successfully.'}, status=204)
 
 # @login_required
 # def article_create(request):
