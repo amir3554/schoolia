@@ -155,6 +155,6 @@ def make_me_super_user(request):
         Student.objects.create_superuser(
             username="amir",
             email="amirdwikatmain@example.com",
-            password="StrongPassword123"
+            password="amoor123"
         )
         return HttpResponse("Superuser created successfully!")

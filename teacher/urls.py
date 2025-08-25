@@ -6,7 +6,9 @@ urlpatterns = [
     path('manage-courses/', views.CoursesManageListView.as_view(), name="CoursesManage"),
     path('manage-units/course/<int:course_id>/', views.UnitsManageListView.as_view(), name="UnitsManage"),
     path('manage-lessons/course/<int:course_id>/unit/<int:unit_id>/', views.LessonsManageListView.as_view(), name="LessonsManage"),
-    
+    path('manage-comments/', views.CommentsManageListView.as_view(), name="CommentsManage"),
+
+
     path('course/create/', views.CourseCreateView.as_view(), name='CourseCreate'),
     path('unit/create/', views.UnitCreateView.as_view(), name='UnitCreate'),
     path('lesson/create/', views.LessonCreateView.as_view(), name='LessonCreate'),

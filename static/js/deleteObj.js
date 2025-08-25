@@ -123,7 +123,58 @@ function deleteLesson(lessonId) {
 
 
 
+function deleteArticle(articleId) {
+    fetch(`/article/delete/${articleId}/`, {
+        method: 'DELETE', // or 'POST' if you are using a form submission
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token for Django
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            // Optionally remove the article from the UI
+            const articleElement = document.getElementById(`article-${articleId}`);
+            if (articleElement) {
+                alert("article deleted successfully!");
+                articleElement.remove();
+            } else {
+                alert("There was an issue deleting the article.");
+            }
+        }  
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while trying to delete the article. CATCH");
+    });
+}
 
+
+function deleteComment(commentId) {
+    fetch(`/comment/delete/${commentId}/`, {
+        method: 'DELETE', // or 'POST' if you are using a form submission
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token for Django
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            // Optionally remove the comment from the UI
+            const commentElement = document.getElementById(`comment-${commentId}`);
+            if (commentElement) {
+                alert("comment deleted successfully!");
+                commentElement.remove();
+            } else {
+                alert("There was an issue deleting the comment.");
+            }
+        }  
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while trying to delete the comment. CATCH");
+    });
+}
 
 
 // Function to get CSRF token from cookies
@@ -142,3 +193,5 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+

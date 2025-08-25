@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+
+{% block extra_css %}
+
+<link href="{% static 'css/main_schoolia.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+<div class="container my-5">
+    <section>
+        <div class="col-md-12 mb-5">
+            <p class="h1 text-center text-secondary">
+                {% trans "Schoolia academy" %}
+            </p>
+            <div class="d-flex justify-content-center">
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+{% for comment in comments %}
+<div class="container">
+    <div class="paragraph-card comment-card" data-comment-id="{{ comment.id }}" data-course-id="{{ course.id }}">
+        <h3>{{ comment.sender.username }}</h3s>
+        <p>
+            {{ comment.content }}
+        </p>
+        <br>
+        <p>
+            {{ comment.description }}
+        </p>
+        <p>
+            {{ comment.created_at }}
+        </p>
+        <button class="delete-btn-article btn btn-danger"
+            data-article-id="{{ article.id }}">
+            <i class="bi bi-trash"></i>
+        </button>
+    </div>
+</div>
+
+{% empty %}
+
+<h2 class="text-muted">{% trans "There is no comments for now" %}</h2>
+
+{% endfor %} 
+
+{% endblock content %}

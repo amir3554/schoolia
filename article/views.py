@@ -45,27 +45,21 @@ def article_create(request):
                 except Exception:
                     pass
 
-                # توليد اسم عشوائي للملف
-                key = f"media/courses/{random.randint(1,1000)}-{random.randint(1,1000)}-{f.name}"
+                key = upload_fileobj_to_s3(f, content_type=f.content_type)
                 
-                # رفع الملف على S3
-                upload_fileobj_to_s3(f, key, content_type=f.content_type)
-
-                # الحصول على الرابط العمومي
                 image_url = public_url(key)
 
-            # إنشاء المقال وربط الصورة كرابط
             a = Article.objects.create(
                 title=title,
                 content=content,
-                image=image_url,   # لاحظ هنا نمرر الرابط بدل ملف
+                image=image_url,
                 student=request.user
             )
 
             return redirect('Article', a.pk)
         except Exception as e:
             print(e)
-            return render(request, 'article_form.html', {'article': None})
+            return render(request, 'article_form.html', {'article': None, 'error' : 'error while creating article'})
 
     return render(request, 'article_form.html', {'article': None})
 
@@ -117,7 +111,6 @@ def article_delete(request, pk):
         return HttpResponseForbidden()
     if is_supervisor is None:
         return HttpResponseForbidden()
-    
     if article.student != request.user:
         return HttpResponseForbidden()
     

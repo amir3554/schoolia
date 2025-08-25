@@ -8,12 +8,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods 
 from django.shortcuts import get_object_or_404
-from school.models import Course, Unit, Lesson
+from school.models import Course, Unit, Lesson, Comment
 from django.http import JsonResponse
-from .models import Teacher, Role
 from teacher.forms import CourseModelForm, UnitModelForm, LessonModelForm
-import uuid
-import random
 from utils.s3 import upload_fileobj_to_s3, public_url
 
 
@@ -72,6 +69,7 @@ class UnitsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             super()
             .get_queryset()
             .select_related("course")   # جلب FK بكفاءة
+            .order_by('-created_at')
         )
         course_id = self.kwargs.get("course_id")
         if course_id is not None:
@@ -113,11 +111,40 @@ class LessonsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             super()
             .get_queryset()
             .select_related("unit")   # جلب FK بكفاءة
+            .order_by('-created_at')
         )
         unit_id = self.kwargs.get("unit_id")
         if unit_id is not None:
             qs = qs.filter(unit_id=unit_id)  # <-- احفظ الناتج
         return qs
+
+
+
+
+class CommentsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Comment
+    template_name = "operations/comments_manage.html"
+
+
+    def test_func(self):
+        is_teacher = getattr(self.request, 'is_teacher', None)
+        is_supervisor = getattr(self.request, 'is_supervisor', None)
+        teacher = getattr(self.request, 'teacher', None)
+        if teacher is None:
+           return False
+        if is_teacher is None:
+           return False
+        if is_supervisor is None:
+           return False
+        
+        return is_supervisor or is_teacher
+
+    def get_queryset(self) -> QuerySet[Any]:
+        qs =  super().get_queryset()
+        qs.select_related('sender').order_by('-created_at')
+        return qs
+
+
 
 
 
@@ -438,47 +465,53 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 
+
 @login_required
 @require_http_methods(['DELETE'])
 def delete_course(request, pk):
 
-    is_teacher = getattr(request, 'is_teacher', None)
     is_supervisor = getattr(request, 'is_supervisor', None)
     teacher = getattr(request, 'teacher', None)
 
-    if teacher is None:
+    if teacher and is_supervisor: 
+        course = get_object_or_404(Course, id=pk)
+        course.delete()
+        return JsonResponse({'message': 'course deleted successfully.'}, status=204)
+    else:
         return HttpResponseForbidden()
-    if is_teacher is None:
-        return HttpResponseForbidden()
-    if is_supervisor is None:
-        return HttpResponseForbidden()
-
-    course = get_object_or_404(Course, id=pk)
-    course.delete()
-    return JsonResponse({'message': 'course deleted successfully.'}, status=204)
 
 
 @login_required
 @require_http_methods(['DELETE'])
 def delete_unit(request, pk):
-    is_teacher = getattr(request, 'is_teacher', None)
     is_supervisor = getattr(request, 'is_supervisor', None)
     teacher = getattr(request, 'teacher', None)
 
-    if teacher is None:
+    if teacher and is_supervisor: 
+        course = get_object_or_404(Course, id=pk)
+        course.delete()
+        return JsonResponse({'message': 'course deleted successfully.'}, status=204)
+    else:
         return HttpResponseForbidden()
-    if is_teacher is None:
-        return HttpResponseForbidden()
-    if is_supervisor is None:
-        return HttpResponseForbidden()
-    unit = get_object_or_404(Unit, id=pk)
-    unit.delete()
-    return JsonResponse({'message': 'unit deleted successfully.'}, status=204)
 
 
 @login_required
 @require_http_methods(['DELETE'])
 def delete_lesson(request, pk):
+    is_supervisor = getattr(request, 'is_supervisor', None)
+    teacher = getattr(request, 'teacher', None)
+
+    if teacher and is_supervisor: 
+        course = get_object_or_404(Course, id=pk)
+        course.delete()
+        return JsonResponse({'message': 'course deleted successfully.'}, status=204)
+    else:
+        return HttpResponseForbidden()
+
+
+@login_required
+@require_http_methods(['DELETE'])
+def delete_comment(request, pk):
     is_teacher = getattr(request, 'is_teacher', None)
     is_supervisor = getattr(request, 'is_supervisor', None)
     teacher = getattr(request, 'teacher', None)
@@ -489,6 +522,7 @@ def delete_lesson(request, pk):
         return HttpResponseForbidden()
     if is_supervisor is None:
         return HttpResponseForbidden()
-    lesson = get_object_or_404(Lesson, id=pk)
-    lesson.delete()
-    return JsonResponse({'message': 'lesson deleted successfully.'}, status=204)
+    
+    comment = get_object_or_404(Comment, id=pk)
+    comment.delete()
+    return JsonResponse({'message': 'comment deleted successfully.'}, status=204)
