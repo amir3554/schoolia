@@ -59,6 +59,10 @@
                 {{ course }}
             </p>
             <br>
+            <a class="btn btn-primary px-4" href="{% url 'ArticleDetails' article.id %}">
+              <i class="bi bi-eye ms-1"></i>
+            </a>
+            <br>
             <p>
                 {{ course.description }}
             </p>

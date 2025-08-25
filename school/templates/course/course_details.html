@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load currency %}
+
+{% block title %}{{ course.name }}{% endblock title %}
+
+{% block content %}
+
+<div class="container my-5">
+    <div class="row bd-highlight">
+        <div class="col-md-12">
+            <h4 class="my-3 text-center">
+                <div id="course-id"
+                    class="alert py-3"
+                    style="background-color: rgb(150, 50, 110);"
+                    data-course-id="{{ course.id }}">
+
+                    {% if course.image %}
+                    <img class="img-responsive img-rounded img-course"
+                        src="{{ course.image }}" alt=""/>
+                    {% else %}
+                    <img src="#"
+                        alt="..." 
+                        class="img-fluid rounded slider-image-full">
+                    {% endif %}
+
+                    <h3 class="text-center text-white">{% trans 'Price' %}</h3>
+                    <h3 class="text-center text-white">{{ course.price|currency }}</h3>
+                    <h3 class="text-center text-white">{% trans 'Details' %}</h3>
+                    <p class=" text-center text-white small">
+                        {{ course }}
+                        <br>
+                        <br>
+                        {{ course.description }}
+                        <br>
+                        <br>
+                    </p>
+                </div>
+            </h4>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
