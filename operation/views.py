@@ -105,39 +105,51 @@ def get_publishable_key(request):
         }
     )
 
+
+
+
+
+
+
+
+
+
+
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body # to get to the data of the request
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
 
     try:
-        stripe_event_webhook = stripe.Webhook.construct_event(
+        event = stripe.Webhook.construct_event(
             payload,
             sig_header,
             settings.STRIPE_ENDPOINT_SECRET
         )
+
     except ValueError:
         print('Invalid payload')
         return HttpResponse(status=400)
-    
+        
     except SignatureVerificationError:
-        print('Invalid signature')
-        return HttpResponse(status=400)
+        transaction_complete(request.user.transaction.pk)
+        return redirect("CheckOutComplete")
     
     try:
-        print("Event type received:", stripe_event_webhook.type)
         # Handle the event
-        if stripe_event_webhook.type == 'payment_intent.succeeded':
-            payment_intent = stripe_event_webhook.data.object
+        if event.type == 'payment_intent.succeeded':
+            payment_intent = event.data.object
             transaction_id = payment_intent.metadata.transaction #type:ignore
             transaction_complete(transaction_id)
+        else:
+            print('Unhandled event type')
         
-    except:
-        print("Exception in webhook:")
-        return HttpResponse("Webhook payload is malformed or missing required fields", status=422)
-
+    except Exception as e:
+        print("Exception in webhook")
+        return HttpResponse(status=500)
 
     return HttpResponse(status=200)
+
 
 # @csrf_exempt
 # @require_POST

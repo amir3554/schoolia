@@ -21,7 +21,11 @@
           {% if article %}<i class="bi bi-pencil-square ms-1"></i> {% trans "Edit Article" %}
           {% else %}<i class="bi bi-journal-plus ms-1"></i> {% trans "Write Article" %}{% endif %}
         </h1>
-        {% if error %} <h2>{{error}} </h2> {% endif %}
+        {% if error %}
+        <div class="alert alert-info">
+            {{error}} 
+        </div>
+        {% endif %}
         <form method="post" enctype="multipart/form-data"
               action="{% if article %}{% url 'ArticleUpdate' article.id %}{% else %}{% url 'ArticleCreate' %}{% endif %}">
           {% csrf_token %}
