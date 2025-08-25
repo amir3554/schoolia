@@ -63,6 +63,10 @@
             {{ article.content }}
         </p>
         <br>
+        <span class="pull-right btn bg bg-white" style="font-size:small;">                    
+            {{ article.created_at }}
+        </span>
+        <br>
         <a class="btn btn-primary px-4" href="{% url 'Article' article.id %}">
               <i class="bi bi-eye ms-1"></i> {% trans "View" %}
         </a>
@@ -72,10 +76,7 @@
             data-article-id="{{ article.id }}">
             <i class="bi bi-trash"></i>
         </button>
-        {% endif %}
-         <span class="pull-right btn bg bg-white" style="font-size:small;">                    
-            {{ article.created_at }}
-        </span>
+        {% endif %}         
     </div>
 </div>
 

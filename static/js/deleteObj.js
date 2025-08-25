@@ -124,7 +124,7 @@ function deleteLesson(lessonId) {
 
 
 function deleteArticle(articleId) {
-    fetch(`/article/delete/${articleId}/`, {
+    fetch(`/article/article/delete/${articleId}/`, {
         method: 'DELETE', // or 'POST' if you are using a form submission
         headers: {
             'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token for Django
@@ -151,7 +151,7 @@ function deleteArticle(articleId) {
 
 
 function deleteComment(commentId) {
-    fetch(`/comment/delete/${commentId}/`, {
+    fetch(`/teacher/comment/delete/${commentId}/`, {
         method: 'DELETE', // or 'POST' if you are using a form submission
         headers: {
             'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token for Django
