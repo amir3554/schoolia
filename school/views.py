@@ -56,7 +56,7 @@ def course_landing(request, course_id):
 
     total_lessons = sum(u.lesson_set.count() for u in units) #type:ignore
 
-    return render(request, 'course_landing.html', {
+    return render(request, 'course/course_landing.html', {
         'course': course,
         'units': units,
         'total_lessons': total_lessons,
