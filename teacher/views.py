@@ -280,7 +280,7 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         video = self.request.FILES.get("video")
         if video:
             key = upload_fileobj_to_s3(video, content_type=video.content_type)
-            self.object.image = public_url(key)
+            self.object.video = public_url(key)
 
             form.cleaned_data["video"] = None
             if "video" in form.files:
@@ -423,7 +423,7 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         video = self.request.FILES.get("video")
         if video:
             key = upload_fileobj_to_s3(video, content_type=video.content_type)
-            self.object.image = public_url(key)
+            self.object.video = public_url(key)
 
             form.cleaned_data["video"] = None
             if "video" in form.files:
