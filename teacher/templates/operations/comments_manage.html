@@ -25,7 +25,7 @@
 
 
 
-{% for comment in object_list %}
+{% for comment in comments %}
 <div class="container">
     <div class="paragraph-card comment-card" data-comment-id="{{ comment.id }}" data-course-id="{{ course.id }}">
         <h3>{{ comment.sender.username }}</h3s>

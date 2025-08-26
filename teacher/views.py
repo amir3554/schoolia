@@ -124,6 +124,7 @@ class LessonsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class CommentsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Comment
     template_name = "operations/comments_manage.html"
+    context_object_name = 'comments'
 
 
     def test_func(self):
@@ -141,7 +142,7 @@ class CommentsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self) -> QuerySet[Any]:
         qs =  super().get_queryset()
-        qs.all().select_related('sender').order_by('-created_at')
+        qs.filter().select_related('sender').order_by('-created_at')
         return qs
 
 
