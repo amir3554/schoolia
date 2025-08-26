@@ -99,12 +99,12 @@ class LessonsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        course_id = self.kwargs.get('course_id')
-        if course_id is not None:
-            course = get_object_or_404(Course.objects.only('id'), id=course_id)
-            unit = get_object_or_404(Unit.objects.only('id'), course=course.pk)
-            context['course'] = course
-            context['unit'] = unit
+        course_id = self.kwargs['course_id']
+        unit_id = self.kwargs['unit_id']
+        course = get_object_or_404(Course.objects.only('id'), id=course_id)
+        unit = get_object_or_404(Unit.objects.only('id'), id=unit_id)
+        context['course'] = course
+        context['unit'] = unit
         return context
 
 
