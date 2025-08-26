@@ -102,11 +102,11 @@ def article_update(request, article_id):
 
 @login_required
 @require_http_methods(['DELETE'])
-def article_delete(request, pk):
+def article_delete(request, article_id):
     is_teacher = getattr(request, 'is_teacher', None)
     is_supervisor = getattr(request, 'is_supervisor', None)
     teacher = getattr(request, 'teacher', None)
-    article = get_object_or_404(Article, id=pk)
+    article = get_object_or_404(Article, id=article_id)
 
     if teacher is None:
         return HttpResponseForbidden()

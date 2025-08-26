@@ -142,7 +142,7 @@ class CommentsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self) -> QuerySet[Any]:
         qs =  super().get_queryset()
-        qs.filter().select_related('sender').order_by('-created_at')
+        qs.select_related('sender').order_by('-created_at')
         return qs
 
 
