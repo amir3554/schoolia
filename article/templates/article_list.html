@@ -36,10 +36,7 @@
 
 {% for article in articles %}
 <div class="container">
-    <div class="paragraph-card article-card"
-        data-unit-id="{{ unit.id }}"
-        data-course-id="{{ course.id }}"
-        data-article-id="{{ article.id }}">
+    <div class="paragraph-card article-card" data-article-id="{{ article.id }}" id="article-{{ article.id }}">
 
         <div class="col-md-3 text-center d-none d-lg-block" >
             <div class="image-wrapper-full">

@@ -27,7 +27,7 @@
 
 {% for comment in comments %}
 <div class="container">
-    <div class="paragraph-card comment-card" data-comment-id="{{ comment.id }}">
+    <div class="paragraph-card comment-card" data-comment-id="{{ comment.id }}" id="comment-{{ comment.id }}">
         <h5>{{ comment.sender.username }}</h5>
         <p class="text-small">
             {{ comment.content }}
