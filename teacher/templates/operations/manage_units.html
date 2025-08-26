@@ -101,7 +101,7 @@
 </div>
 <div class="d-flex justify-content-center mt-5 py-5">
     <button class="btn btn-lg main-button">
-        <a href="{% url 'UnitCreate' %}" class="btn main-button">
+        <a href="{% url 'UnitCreate' course.id %}" class="btn main-button">
                 <i class="bi bi-plus-lg "></i> {% trans 'New unit'%}
         </a>
     </button>

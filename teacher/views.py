@@ -217,6 +217,14 @@ class UnitCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return is_supervisor
 
 
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        course_id = self.kwargs['course_id']
+        form.fields['course'].queryset = form.fields['course'].queryset.filter(course_id=course_id) #type:ignore
+        return form
+
+
+
     def form_valid(self, form):
         self.object = form.save()
         return super().form_valid(form)
@@ -247,6 +255,12 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         
         return is_supervisor
 
+
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        unit_id = self.kwargs['unit_id']
+        form.fields['unit'].queryset = form.fields['unit'].queryset.filter(unit_id=unit_id) #type:ignore
+        return form
 
     def form_valid(self, form):
 
@@ -367,6 +381,12 @@ class UnitUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return is_supervisor or is_teacher
 
 
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        course_id = self.kwargs['course_id']
+        form.fields['course'].queryset = form.fields['course'].queryset.filter(course_id=course_id) #type:ignore
+        return form
+
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         self.object = form.save()
         return super().form_valid(form)
@@ -394,6 +414,13 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
            return False
         
         return is_supervisor or is_teacher
+
+
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        unit_id = self.kwargs['unit_id']
+        form.fields['unit'].queryset = form.fields['unit'].queryset.filter(unit_id=unit_id) #type:ignore
+        return form
 
 
     def form_valid(self, form):
@@ -471,9 +498,9 @@ def delete_unit(request, pk):
     teacher = getattr(request, 'teacher', None)
 
     if teacher and is_supervisor: 
-        lesson = get_object_or_404(Lesson, id=pk)
-        lesson.delete()
-        return JsonResponse({'message': 'lesson deleted successfully.'}, status=204)
+        unit = get_object_or_404(Unit, id=pk)
+        unit.delete()
+        return JsonResponse({'message': 'unit deleted successfully.'}, status=204)
     else:
         return HttpResponseForbidden()
 
