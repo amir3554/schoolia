@@ -471,9 +471,9 @@ def delete_unit(request, pk):
     teacher = getattr(request, 'teacher', None)
 
     if teacher and is_supervisor: 
-        course = get_object_or_404(Course, id=pk)
-        course.delete()
-        return JsonResponse({'message': 'course deleted successfully.'}, status=204)
+        lesson = get_object_or_404(Lesson, id=pk)
+        lesson.delete()
+        return JsonResponse({'message': 'lesson deleted successfully.'}, status=204)
     else:
         return HttpResponseForbidden()
 
@@ -485,9 +485,9 @@ def delete_lesson(request, pk):
     teacher = getattr(request, 'teacher', None)
 
     if teacher and is_supervisor: 
-        course = get_object_or_404(Course, id=pk)
-        course.delete()
-        return JsonResponse({'message': 'course deleted successfully.'}, status=204)
+        lesson = get_object_or_404(Lesson, id=pk)
+        lesson.delete()
+        return JsonResponse({'message': 'lesson deleted successfully.'}, status=204)
     else:
         return HttpResponseForbidden()
 
