@@ -155,7 +155,6 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Course
     form_class = CourseModelForm
     template_name = 'operations/create_course.html'
-    success_url = reverse('CoursesManage')
 
     
     def test_func(self):
@@ -197,6 +196,9 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
             self.object.save()
             return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('CoursesManage')
 
 
 class UnitCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -300,7 +302,6 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Course
     form_class = CourseModelForm
     template_name = 'operations/create_course.html'
-    success_url = reverse('CoursesManage')
 
 
     
@@ -343,6 +344,9 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             self.object.save()
             return HttpResponseRedirect(self.get_success_url())
 
+
+    def get_success_url(self) -> str:
+        return reverse('CoursesManage')
 
 
 class UnitUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
