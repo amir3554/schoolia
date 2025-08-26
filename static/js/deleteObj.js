@@ -65,19 +65,19 @@ function deleteUnit(unitId) {
     })
     .then(response => {
         if (response.ok) {
-            // Optionally remove the course from the UI
-            const courseElement = document.getElementById(`course-${courseId}`);
-            if (courseElement) {
-                alert("course deleted successfully!");
-                courseElement.remove();
+            // Optionally remove the unit from the UI
+            const unitElement = document.getElementById(`unit-${unitId}`);
+            if (unitElement) {
+                alert("unit deleted successfully!");
+                unitElement.remove();
             } else {
-                alert("There was an issue deleting the course.");
+                alert("There was an issue deleting the unit.");
             }
         }  
     })
     .catch(error => {
         console.error('Error:', error);
-        alert("An error occurred while trying to delete the course. CATCH");
+        alert("An error occurred while trying to delete the unit.");
     });
 }
 
@@ -117,7 +117,7 @@ function deleteLesson(lessonId) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert("An error occurred while trying to delete the lesson. CATCH");
+        alert("An error occurred while trying to delete the lesson.");
     });
 }
 
