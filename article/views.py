@@ -16,6 +16,7 @@ def article_detail(request, article_id):
                         receiver_object_id=article.pk)
                 .select_related('sender')
                 .prefetch_related('children__sender')
+                .prefetch_related('children')
                 .order_by('-created_at'))
     return render(request, 'article.html', {
         'article': article,
@@ -87,9 +88,11 @@ def article_update(request, article_id):
             except Exception:
                 pass
 
-            key = f"media/courses/{random.randint(1,1000)}-{random.randint(1,1000)}-{f.name}"
-            upload_fileobj_to_s3(f, key, content_type=getattr(f, "content_type", None))
-            article.image = public_url(key)   # نخزن URL الناتج #type:ignore
+            key = upload_fileobj_to_s3(f, content_type=f.content_type)
+                
+            image_url = public_url(key)
+
+            article.image = image_url #type:ignore
 
         article.save()
         return redirect('Article', article.pk)
@@ -117,38 +120,10 @@ def article_delete(request, pk):
     article.delete()
     return JsonResponse({'message': 'article deleted successfully.'}, status=204)
 
-# @login_required
-# def article_create(request):
-#     if request.method == 'POST':
-#         try:
-#             a = Article.objects.create(
-#                 title=request.POST['title'],
-#                 content=request.POST['content'],
-#                 image=request.FILES.get('image'),
-#                 student=request.user
-#             )
-#             return redirect('Article', a.pk)
-#         except:
-#             return render(request, 'article_form.html', {'article': None})
-        
-#     return render(request, 'article_form.html', {'article': None})
-
-
-# @login_required
-# def article_update(request, article_id):
-#     article = get_object_or_404(Article, pk=article_id, student=request.user)
-#     if request.method == 'POST':
-#         article.title = request.POST.get('title') or article.title
-#         article.content = request.POST.get('content') or article.content
-#         if request.FILES.get('image'):
-#             article.image = request.FILES['image']
-#         article.save()
-#         return redirect('Article', article.pk)
-#     return render(request, 'article_form.html', {'article': article})
 
 
 def articles_list(request):
-    articles = Article.objects.all().order_by("-created_at")
+    articles = Article.objects.all().order_by("-created_at").select_related('student')
     paginator = Paginator(articles, 15)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.page(page_number)

@@ -73,7 +73,7 @@
               <i class="bi bi-eye ms-1"></i>
         </a>
         <br>
-        {% if article.studen == request.user or request.teacher %}
+        {% if article.student == request.user or request.teacher %}
         <button class="delete-btn-article btn btn-danger"
             data-article-id="{{ article.id }}">
             <i class="bi bi-trash"></i>
@@ -124,6 +124,10 @@
     </div>
 {% endif %}
 
-
-
 {% endblock content %}
+
+{% block extra_js %}
+
+<script defer src="{% static 'js/deleteObj.js' %}"></script>
+
+{% endblock extra_js %}
