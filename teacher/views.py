@@ -102,7 +102,9 @@ class LessonsManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         course_id = self.kwargs.get('course_id')
         if course_id is not None:
             course = get_object_or_404(Course.objects.only('id'), id=course_id)
+            unit = get_object_or_404(Unit.objects.only('id'), course=course.pk)
             context['course'] = course
+            context['unit'] = unit
         return context
 
 
