@@ -155,7 +155,7 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Course
     form_class = CourseModelForm
     template_name = 'operations/create_course.html'
-    success_url = 'CoursesManage'
+    success_url = reverse('CoursesManage')
 
     
     def test_func(self):
@@ -270,15 +270,6 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
         image = self.request.FILES.get("image")
         if image:
-            try:
-                image.open()
-            except Exception:
-                pass
-            try:
-                image.seek(0)
-            except Exception:
-                pass
-
             key = upload_fileobj_to_s3(image, content_type=image.content_type)
             self.object.image = public_url(key)
 
@@ -288,15 +279,6 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
         video = self.request.FILES.get("video")
         if video:
-            try:
-                video.open()
-            except Exception:
-                pass
-            try:
-                video.seek(0)
-            except Exception:
-                pass
-
             key = upload_fileobj_to_s3(video, content_type=video.content_type)
             self.object.image = public_url(key)
 
@@ -318,7 +300,7 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Course
     form_class = CourseModelForm
     template_name = 'operations/create_course.html'
-    success_url = 'CoursesManage'
+    success_url = reverse('CoursesManage')
 
 
     
@@ -431,15 +413,6 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         image = self.request.FILES.get("image")
         if image:
-            try:
-                image.open()
-            except Exception:
-                pass
-            try:
-                image.seek(0)
-            except Exception:
-                pass
-
             key = upload_fileobj_to_s3(image, content_type=image.content_type)
             self.object.image = public_url(key)
 
@@ -449,15 +422,6 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         video = self.request.FILES.get("video")
         if video:
-            try:
-                video.open()
-            except Exception:
-                pass
-            try:
-                video.seek(0)
-            except Exception:
-                pass
-
             key = upload_fileobj_to_s3(video, content_type=video.content_type)
             self.object.image = public_url(key)
 
