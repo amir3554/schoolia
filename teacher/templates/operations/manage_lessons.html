@@ -76,7 +76,7 @@
                                 <hr class="dropdown-divider">
                                 <li>
                                     <a class="btn" style="background-color:rgb(150, 50, 110);" 
-                                        href="{% url 'LessonUpdate' lesson.id %}">
+                                        href="{% url 'LessonUpdate' lesson.unit.id lesson.id %}">
                                         {% trans "Update lesson" %}
                                     </a>
                                     <button class="delete-btn-lesson btn main-button"
