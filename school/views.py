@@ -66,7 +66,7 @@ def course_landing(request, course_id):
         'course': course,
         'units': units,
         'total_lessons': total_lessons,
-        'lesson' : preview_lesson
+        'preview_lesson' : preview_lesson
     })
 
 

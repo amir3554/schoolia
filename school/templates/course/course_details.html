@@ -125,19 +125,19 @@
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <!-- خيار YouTube -->
-        {% if lesson.youtube_id %}
+        {% if preview_lesson.youtube_id %}
           <div class="ratio ratio-16x9 rounded overflow-hidden">
             <iframe
-              src="https://www.youtube.com/embed/{{ lesson.youtube_id }}"
+              src="https://www.youtube.com/embed/{{ preview_lesson.youtube_id }}"
               title="{% trans '# lesson #' %}"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen>
             </iframe>
           </div>
-        {% elif lesson.video %}
+        {% elif preview_lesson.video %}
           <!-- ملف فيديو داخلي -->
-          <video class="w-100 rounded" controls preload="metadata" poster="{{ lesson.image }}">
-            <source src="{{ lesson.video }}" type="video/mp4">
+          <video class="w-100 rounded" controls preload="metadata" poster="{{ preview_lesson.image }}">
+            <source src="{{ preview_lesson.video }}" type="video/mp4">
           {% trans "your browser doesn't support this video." %}
           </video>
         {% else %}
@@ -148,8 +148,8 @@
         </div>
         {% endif %}
 
-        {% if lesson.content %}
-          <p class="mt-3 mb-0">{{ lesson.content|linebreaks }}</p>
+        {% if preview_lesson.content %}
+          <p class="mt-3 mb-0">{{ preview_lesson.content|linebreaks }}</p>
         {% endif %}
       </div>
     </div>
