@@ -463,14 +463,14 @@ msgstr "لا يوجد دورات في اللحظة"
 #, fuzzy
 #| msgid "My Courses"
 msgid "Edit Course"
-msgstr "دوراتي"
+msgstr "تعديل الدورة"
 
 #: .\teacher\templates\operations\create_course.html:6
 #: .\teacher\templates\operations\create_course.html:25
 #, fuzzy
 #| msgid "My Courses"
 msgid "Add Course"
-msgstr "دوراتي"
+msgstr "اضافة دورة"
 
 #: .\teacher\templates\operations\create_course.html:49
 #: .\teacher\templates\operations\create_lesson.html:43
@@ -489,7 +489,7 @@ msgstr "إضافة"
 #, fuzzy
 #| msgid "# lesson #"
 msgid "Edit lesson"
-msgstr "# الدرس #"
+msgstr "تعديل الدرس"
 
 #: .\teacher\templates\operations\create_lesson.html:7
 #: .\teacher\templates\operations\create_lesson.html:27
@@ -546,7 +546,7 @@ msgstr "حذف"
 #, fuzzy
 #| msgid "My Courses"
 msgid "New Course"
-msgstr "دوراتي"
+msgstr "كورس جديد"
 
 #: .\teacher\templates\operations\main_manage.html:122
 #, fuzzy
