@@ -53,6 +53,7 @@ def course_landing(request, course_id):
                   .order_by('-id')
                   .first())
     
+    preview_lesson_comments = None
     if preview_lesson is not None:
         preview_lesson_comments = (Comment.objects
                     .filter(
