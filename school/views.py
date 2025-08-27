@@ -50,7 +50,7 @@ def course_landing(request, course_id):
 
     preview_lesson = (Lesson.objects
                   .filter(unit__course_id=course_id)
-                  .order_by('unit__order', 'order', 'id')
+                  .order_by('-id')
                   .first())
 
     units = (Unit.objects
