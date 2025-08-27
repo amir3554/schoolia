@@ -122,6 +122,10 @@
         <div class="alert alert-info">{% trans "No Units For This Course" %}</div>
     {% endif %}
 
+
+<h1 class="h3 mb-2"><i class="bi bi-eye ms-1"></i><i class="bi bi-eye ms-1"></i><i class="bi bi-eye ms-1"></i></h1>
+<h1 class="h3 mb-2">{{ preview_lesson.title }}</h1>
+
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <!-- خيار YouTube -->
@@ -183,29 +187,6 @@
                   </div>
                   {% if c.title %}<div class="mt-1 fw-semibold">{{ c.title }}</div>{% endif %}
                   <p class="mb-2 mt-1">{{ c.content|linebreaksbr }}</p>
-
-                  <!-- نموذج رد -->
-                  <div class="collapse" id="reply-{{ c.id }}">
-                    <form class="mt-2" method="post" action="{% url 'CommentAddComment' course_id lesson.id %}">
-                      {% csrf_token %}
-                      <div class="row g-2">
-                        <div class="col-12">
-                          <div class="form-floating">
-                            <textarea name="content" class="form-control" id="replyContent-{{ c.id }}" placeholder="{% trans 'reply....' %}" style="height: 100px" required></textarea>
-                            <label for="replyContent-{{ c.id }}">{% trans 'write your reply' %}</label>
-                          </div>
-                        </div>
-                        <input type="hidden" name="receiver_type" value="comment">
-                        <input type="hidden" name="receiver_id" value="{{ c.id }}">
-                        <input type="hidden" name="parent_id" value="{{ c.id }}">
-                        <div class="col-12 text-end">
-                          <button class="btn btn-outline-primary btn-sm" type="submit">
-                            <i class="bi bi-send"></i> {% trans "send" %}
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
 
                   <!-- الردود -->
                   {% if c.children.all %}
