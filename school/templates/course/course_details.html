@@ -154,6 +154,92 @@
       </div>
     </div>
 
+    <!-- التعليقات -->
+    <section id="comments" class="mb-5">
+      <div class="d-flex align-items-center mb-3">
+        <h2 class="h5 mb-0"><i class="bi bi-chat-left-text ms-1"></i> {% trans "comments" %}</h2>
+        <span class="badge bg-secondary rounded-pill me-2">{{ comments.count }}</span>
+      </div>
+
+      {% if comments %}
+        <div class="vstack gap-3">
+          {% for c in comments %}
+            <article class="comment-card p-3 bg-white">
+              <div class="d-flex align-items-start">
+                <div class="avatar ms-2" aria-hidden="true">
+                  {{ c.sender|default:c.sender.username }}
+                </div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between flex-wrap">
+                    <div>
+                      <strong>{{ c.sender|default:c.sender.username }}</strong>
+                      <span class="text-muted small ms-2">{{ c.created_at|timesince }} {% trans "ago" %}</span>
+                    </div>
+                    <div class="sticky-actions d-inline-flex">
+                      <a class="link-secondary small" data-bs-toggle="collapse" href="#reply-{{ c.id }}" role="button" aria-expanded="false" aria-controls="reply-{{ c.id }}">
+                        <i class="bi bi-reply"></i> {% trans "reply" %}
+                      </a>
+                    </div>
+                  </div>
+                  {% if c.title %}<div class="mt-1 fw-semibold">{{ c.title }}</div>{% endif %}
+                  <p class="mb-2 mt-1">{{ c.content|linebreaksbr }}</p>
+
+                  <!-- نموذج رد -->
+                  <div class="collapse" id="reply-{{ c.id }}">
+                    <form class="mt-2" method="post" action="{% url 'CommentAddComment' course_id lesson.id %}">
+                      {% csrf_token %}
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <div class="form-floating">
+                            <textarea name="content" class="form-control" id="replyContent-{{ c.id }}" placeholder="{% trans 'reply....' %}" style="height: 100px" required></textarea>
+                            <label for="replyContent-{{ c.id }}">{% trans 'write your reply' %}</label>
+                          </div>
+                        </div>
+                        <input type="hidden" name="receiver_type" value="comment">
+                        <input type="hidden" name="receiver_id" value="{{ c.id }}">
+                        <input type="hidden" name="parent_id" value="{{ c.id }}">
+                        <div class="col-12 text-end">
+                          <button class="btn btn-outline-primary btn-sm" type="submit">
+                            <i class="bi bi-send"></i> {% trans "send" %}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- الردود -->
+                  {% if c.children.all %}
+                    <div class="mt-3 reply-thread">
+                      <div class="vstack gap-3">
+                        {% for r in c.children.all %}
+                          <div class="d-flex">
+                            <div class="avatar ms-2">{{ r.sender.get_short_name|default:r.sender.username|first|upper }}</div>
+                            <div>
+                              <div class="d-flex justify-content-between flex-wrap">
+                                <div>
+                                  <strong>{{ r.sender.get_full_name|default:r.sender.username }}</strong>
+                                  <span class="text-muted small ms-2">{{ r.created_at|timesince }} {% trans "ago" %}</span>
+                                </div>
+                              </div>
+                              {% if r.title %}<div class="mt-1 fw-semibold">{{ r.title }}</div>{% endif %}
+                              <p class="mb-0 mt-1">{{ r.content|linebreaksbr }}</p>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info">
+            {% trans "no comments , be the first comment!" %}
+        </div>
+      {% endif %}
+    </section>
 
 </main>
 

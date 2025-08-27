@@ -52,6 +52,17 @@ def course_landing(request, course_id):
                   .filter(unit__course_id=course_id)
                   .order_by('-id')
                   .first())
+    
+    if preview_lesson is not None:
+        preview_lesson_comments = (Comment.objects
+                    .filter(
+                    receiver_content_type__model='lesson',
+                    receiver_object_id=preview_lesson.pk
+                    )
+                    .select_related('sender')
+                    .prefetch_related('children__sender')
+                    .order_by('-created_at')
+                    )
 
     units = (Unit.objects
              .filter(course_id=course.pk)
@@ -66,7 +77,8 @@ def course_landing(request, course_id):
         'course': course,
         'units': units,
         'total_lessons': total_lessons,
-        'preview_lesson' : preview_lesson
+        'preview_lesson' : preview_lesson,
+        'comments' : preview_lesson_comments,
     })
 
 
