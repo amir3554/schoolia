@@ -17,7 +17,7 @@ class CourseModelForm(forms.ModelForm):
             'name' : _("name"),
             'description' : _("description"),
             'price' : _('price'),
-            'image' : _('image'),
+            'image' : _('image (only [jpg, png, gpeg])'),
         }
 
         widgets = {
@@ -60,8 +60,8 @@ class LessonModelForm(forms.ModelForm):
         labels = {
             'title' : _("title"),
             'content' : _("content"),
-            'image' : _('image'),
-            'video' : _('video'),
+            'image' : _('image (only [jpg, png, gpeg])'),
+            'video' : _('video (only [mp4])'),
             'youtube_id' : _('youtube_id'),
             'unit' : _('unit'),
         }

@@ -12,6 +12,7 @@ from school.models import Course, Unit, Lesson, Comment
 from django.http import JsonResponse
 from teacher.forms import CourseModelForm, UnitModelForm, LessonModelForm
 from utils.s3 import upload_fileobj_to_s3, public_url
+import os
 
 
 class CoursesManageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -173,29 +174,23 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
 
-            self.object = form.save(commit=False)
+        self.object = form.save(commit=False)
 
-            f = self.request.FILES.get("image")
-            if f:
-                try:
-                    f.open()
-                except Exception:
-                    pass
-                try:
-                    f.seek(0)
-                except Exception:
-                    pass
+        f = self.request.FILES.get("image")
+        if f:
+            _, ext = os.path.splitext(f.name)
+            if ext:
+                if ext in ('.jpg', '.jpeg', '.png'):
 
-                
-                key = upload_fileobj_to_s3(f, content_type=f.content_type)
-                self.object.image = public_url(key)
+                    key = upload_fileobj_to_s3(f, content_type=f.content_type)
+                    self.object.image = public_url(key)
 
-                form.cleaned_data["image"] = None
-                if "image" in form.files:
-                    del form.files["image"]
+                    form.cleaned_data["image"] = None
+                    if "image" in form.files:
+                        del form.files["image"]
 
-            self.object.save()
-            return HttpResponseRedirect(self.get_success_url())
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('CoursesManage')
@@ -272,21 +267,27 @@ class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
         image = self.request.FILES.get("image")
         if image:
-            key = upload_fileobj_to_s3(image, content_type=image.content_type)
-            self.object.image = public_url(key)
+            _, ext = os.path.splitext(image.name)
+            if ext:
+                if ext in ('.jpg', '.jpeg', '.png'):
+                    key = upload_fileobj_to_s3(image, content_type=image.content_type)
+                    self.object.image = public_url(key)
 
-            form.cleaned_data["image"] = None
-            if "image" in form.files:
-                del form.files["image"]
+                    form.cleaned_data["image"] = None
+                    if "image" in form.files:
+                        del form.files["image"]
 
         video = self.request.FILES.get("video")
         if video:
-            key = upload_fileobj_to_s3(video, content_type=video.content_type)
-            self.object.video = public_url(key)
+            _, ext = os.path.splitext(video.name)
+            if ext:
+                if ext in ('.mp4',):
+                    key = upload_fileobj_to_s3(video, content_type=video.content_type)
+                    self.object.video = public_url(key)
 
-            form.cleaned_data["video"] = None
-            if "video" in form.files:
-                del form.files["video"]
+                    form.cleaned_data["video"] = None
+                    if "video" in form.files:
+                        del form.files["video"]
 
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
@@ -321,28 +322,23 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
 
-            self.object = form.save(commit=False)
+        self.object = form.save(commit=False)
 
-            f = self.request.FILES.get("image")
-            if f:
-                try:
-                    f.open()
-                except Exception:
-                    pass
-                try:
-                    f.seek(0)
-                except Exception:
-                    pass
+        f = self.request.FILES.get("image")
+        if f:
+            _, ext = os.path.splitext(f.name)
+            if ext:
+                if ext in ('.jpg', '.jpeg', '.png'):
 
-                key = upload_fileobj_to_s3(f, content_type=f.content_type)
-                self.object.image = public_url(key)
+                    key = upload_fileobj_to_s3(f, content_type=f.content_type)
+                    self.object.image = public_url(key)
 
-                form.cleaned_data["image"] = None
-                if "image" in form.files:
-                    del form.files["image"]
+                    form.cleaned_data["image"] = None
+                    if "image" in form.files:
+                        del form.files["image"]
 
-            self.object.save()
-            return HttpResponseRedirect(self.get_success_url())
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
     def get_success_url(self) -> str:
@@ -417,21 +413,27 @@ class LessonUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         image = self.request.FILES.get("image")
         if image:
-            key = upload_fileobj_to_s3(image, content_type=image.content_type)
-            self.object.image = public_url(key)
+            _, ext = os.path.splitext(image.name)
+            if ext:
+                if ext in ('.jpg', '.jpeg', '.png'):
+                    key = upload_fileobj_to_s3(image, content_type=image.content_type)
+                    self.object.image = public_url(key)
 
-            form.cleaned_data["image"] = None
-            if "image" in form.files:
-                del form.files["image"]
+                    form.cleaned_data["image"] = None
+                    if "image" in form.files:
+                        del form.files["image"]
 
         video = self.request.FILES.get("video")
         if video:
-            key = upload_fileobj_to_s3(video, content_type=video.content_type)
-            self.object.video = public_url(key)
+            _, ext = os.path.splitext(video.name)
+            if ext:
+                if ext in ('.mp4'):
+                    key = upload_fileobj_to_s3(video, content_type=video.content_type)
+                    self.object.video = public_url(key)
 
-            form.cleaned_data["video"] = None
-            if "video" in form.files:
-                del form.files["video"]
+                    form.cleaned_data["video"] = None
+                    if "video" in form.files:
+                        del form.files["video"]
 
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
