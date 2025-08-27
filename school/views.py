@@ -48,11 +48,17 @@ def course_landing(request, course_id):
 
     lessons_qs = Lesson.objects.only('id', 'title', 'content', 'image', 'unit_id')
 
+    preview_lesson = (Lesson.objects
+                  .filter(unit__course_id=course_id)
+                  .order_by('unit__order', 'order', 'id')
+                  .first())
+
     units = (Unit.objects
              .filter(course_id=course.pk)
              .only('id', 'name', 'description', 'course_id')
              .prefetch_related(Prefetch('lesson_set', queryset=lessons_qs))
              .annotate(_lessons=Count('lesson')))
+    
 
     total_lessons = sum(u.lesson_set.count() for u in units) #type:ignore
 
@@ -60,6 +66,7 @@ def course_landing(request, course_id):
         'course': course,
         'units': units,
         'total_lessons': total_lessons,
+        'lesson' : preview_lesson
     })
 
 

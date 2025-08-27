@@ -121,6 +121,40 @@
     {% else %}
         <div class="alert alert-info">{% trans "No Units For This Course" %}</div>
     {% endif %}
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <!-- خيار YouTube -->
+        {% if lesson.youtube_id %}
+          <div class="ratio ratio-16x9 rounded overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/{{ lesson.youtube_id }}"
+              title="{% trans '# lesson #' %}"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+        {% elif lesson.video %}
+          <!-- ملف فيديو داخلي -->
+          <video class="w-100 rounded" controls preload="metadata" poster="{{ lesson.image }}">
+            <source src="{{ lesson.video }}" type="video/mp4">
+          {% trans "your browser doesn't support this video." %}
+          </video>
+        {% else %}
+          <div class="alert alert-warning mb-0">
+
+        {% trans "The video link isn't available." %}
+
+        </div>
+        {% endif %}
+
+        {% if lesson.content %}
+          <p class="mt-3 mb-0">{{ lesson.content|linebreaks }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+
 </main>
 
 {% endblock content %}
